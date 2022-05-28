@@ -1,0 +1,83 @@
+.p_profile_container {
+  width: 100%;
+
+  -o-transition: "padding" 0.4s;
+  -moz-transition: "padding" 0.4s;
+  -khtml-transition: "padding" 0.4s;
+  -webkit-transition: "padding" 0.4s;
+  -ms-"padding": "padding" 0.4s;
+  transition: all 0.4s;
+}
+
+.p_profile_image {
+  margin: 0 auto;
+  width: 500px;
+
+  -o-transition: "padding" 0.4s;
+  -moz-transition: "padding" 0.4s;
+  -khtml-transition: "padding" 0.4s;
+  -webkit-transition: "padding" 0.4s;
+  -ms-"padding": "padding" 0.4s;
+  transition: all 0.4s;
+}
+
+.p_profile_row {
+  padding-top: 80px;
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-bottom: 30px;
+  margin: auto;
+  margin-top: -60px;
+  margin-bottom: 45px;
+  max-width: 700px;
+
+  -o-transition: "margin" 0.4s;
+  -moz-transition: "margin" 0.4s;
+  -khtml-transition: "margin" 0.4s;
+  -webkit-transition: "margin" 0.4s;
+  -ms-"margin": "margin" 0.4s;
+  transition: all 0.4s;
+}
+
+.p_profile_header {
+  text-align: center;
+  font-family: "gotham-book";
+  font-size: 16px;
+  color: #999999;
+}
+
+.p_profile_paragraph {
+  margin-top: 20px;
+  font-family: "proximanova-regular";
+  font-size: 16px;
+  color: #666666;
+  line-height: 24px;
+}
+
+@media (max-width: 750px) {
+  .p_profile_image {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+
+  .p_profile_container {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+
+  .p_project_row {
+    margin-bottom: 50px;
+  }
+}
+
+@media (max-width: 540px) {
+  .p_profile_image {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+
+  .p_profile_container {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+}

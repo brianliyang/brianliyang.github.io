@@ -1,0 +1,177 @@
+/* General CSS styling for website */
+
+body {
+  -webkit-font-smoothing: antialiased;
+  background-color: #F4F4F4;
+  font-family: "proximanova-regular";
+}
+
+a, a:link, a:visited, a:active {
+  text-decoration: none;
+  color: #999999;
+}
+
+a:hover {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+@font-face {
+  font-family: "proximanova-regular";
+  src: url("../fonts/proximanova-regular.eot"),
+     url("../fonts/proximanova-regular.eot?#iefix") format("embedded-opentype"),
+     url("../fonts/proximanova-regular.woff2") format("woff2"),
+     url("../fonts/proximanova-regular.woff") format("woff"),
+     url("../fonts/proximanova-regular.ttf") format("truetype"),
+     url("../fonts/proximanova-regular.svg#proxima_novaregular") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "gotham-book";
+  src: url("../fonts/gotham-book.eot"),
+     url("../fonts/gotham-book.eot?#iefix") format("embedded-opentype"),
+     url("../fonts/gotham-book.woff") format("woff"),
+     url("../fonts/gotham-book.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.p_header {
+  width: 100%;
+  display: table;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  padding-left: 75px;
+  padding-right: 75px;
+
+  font-family: "gotham-book";
+}
+
+.p_copyright_footer {
+  margin-bottom: 50px;
+
+  text-align: center;
+  color: #999999;
+}
+
+a.p_name_label {
+  display: table-cell;
+  vertical-align: middle;
+
+  text-decoration: none;
+  font-size: 32px;
+  color: #999999;
+}
+
+.p_name_label:hover {
+  color: #999999;
+}
+
+.p_nav {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: right;
+  font-size: 14px;
+}
+
+a.p_nav_link {
+  color: #CCCCCC;
+  text-decoration: none;
+  margin-left: 50px;
+
+  -o-transition: color 0.2s;
+  -moz-transition: color 0.2s;
+  -khtml-transition: color 0.2s;
+  -webkit-transition: color 0.2s;
+  -ms-transition: color 0.2s;
+  transition: color 0.2s;
+}
+
+.p_nav_link:hover {
+  color: #999999;
+}
+
+a.p_nav_link_selected, .p_nav_link_selected:hover {
+  text-decoration: none;
+  margin-left: 50px;
+  color: #666666;
+}
+
+.p_card_z1 {
+  background-color: #FFFFFF;
+  box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.12), 0px 2px 2px 0px rgba(0,0,0,0.24);
+  border-radius: 16px;
+}
+
+.p_card_z2 {
+  background-color: #FFFFFF;
+  box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.10), 0px 3px 6px 0px rgba(0,0,0,0.15);
+  border-radius: 16px;
+}
+
+.p_social_bar {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.p_social_icon {
+  display: inline-block;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+@media (max-width: 750px) {
+  a.p_name_label {
+    display: block;
+    text-align: center;
+  }
+
+  .p_nav {
+    display: block;
+    margin-top: 30px;
+    text-align: center;
+    color: #FF0000;
+    font-size: 18px;
+  }
+
+  a.p_nav_link {
+    margin-left: 30px;
+  }
+
+  a.p_nav_link_selected, .p_nav_link_selected:hover {
+    margin-left: 30px;
+  }
+}
+
+@media (max-width: 540px) {
+  a.p_name_label {
+    display: block;
+    text-align: center;
+  }
+
+  .p_nav {
+    display: block;
+    margin-top: 30px;
+    text-align: center;
+    color: #FF0000;
+    font-size: 18px;
+  }
+
+  a.p_nav_link {
+    display: block;
+    margin: 0px;
+    margin-top: 5px;
+  }
+
+  a.p_nav_link_selected, .p_nav_link_selected:hover {
+    margin-left: 0px;
+  }
+
+  .p_social_icon {
+    display: inline-block;
+    margin-left: 2px;
+    margin-right: 2px;
+  }
+}

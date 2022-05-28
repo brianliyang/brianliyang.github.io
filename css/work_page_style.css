@@ -1,0 +1,150 @@
+.p_content_container {
+  padding-left: 100px;
+  padding-right: 100px;
+  width: 100%;
+
+  /*background-color: rgba(255, 0, 0, 0.2);*/
+
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  -khtml-transition: all 0.4s;
+  -webkit-transition: all 0.4s;
+  -ms-transition: all 0.4s;
+  transition: all 0.4s;
+}
+
+.p_content_row {
+  margin: 0px auto;
+  max-width: 1000px;
+  margin-bottom: 30px;
+
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  -khtml-transition: all 0.4s;
+  -webkit-transition: all 0.4s;
+  -ms-transition: all 0.4s;
+  transition: all 0.4s;
+}
+
+p {
+  margin: 0px;
+  font-family: "proximanova-regular";
+  font-size: 16px;
+  color: #666666;
+  line-height: 26px;
+}
+
+.p_hero_image {
+  display: block;
+  margin: 0px auto;
+  width: 1000px;
+}
+
+.p_row_image {
+  display: block;
+  margin: 0px auto;
+  width: 1000px;  
+}
+
+.p_column_2_left {
+  padding: 0px 15px 0px 0px;
+}
+
+.p_column_2_right {
+  padding: 0px 0px 0px 15px;
+}
+
+.p_column_3_left {
+  padding: 0px 20px 0px 0px;
+}
+
+.p_column_3_middle {
+  padding: 0px 10px 0px 10px;
+}
+
+.p_column_3_right {
+  padding: 0px 0px 0px 20px;
+}
+
+.p_title_header {
+  width: 100%;
+  display: table;
+
+  margin-bottom: 25px;
+  font-family: "gotham-book";
+}
+
+.p_subtitle {
+  font-size: 24px;
+  color: #999999;
+  letter-spacing: 0.66px;
+  font-family: "gotham-book";
+}
+
+.p_title_name {
+  display: table-cell;
+  vertical-align: middle;
+
+  font-size: 28px;
+  color: #666666;
+  line-height: 30px;
+}
+
+.p_title_time {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: right;
+
+  font-size: 16px;
+  color: #AAAAAA;
+  letter-spacing: 0.66px;
+  line-height: 12px;
+}
+
+.p_google_play_badge {
+  width: 185px;
+}
+
+video {
+  width: 100%    !important;
+  height: auto   !important;
+}
+
+.p_video_error{
+  font-size: 12;
+}
+
+@media (max-width: 750px) {
+  .p_content_container {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+
+  .p_content_row {
+    margin-bottom: 25px;
+  }
+}
+
+@media (max-width: 540px) {
+  .p_content_container {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+
+  .p_content_row {
+    margin-bottom: 15px;
+  }
+
+  .p_title_name {
+    display: block;
+    font-size: 24px;
+  }
+
+  .p_title_time {
+    display: block;
+    margin-top: 10px;
+
+    text-align: left;
+    font-size: 14px;
+  }
+}

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/portfolio_style.css" />
+    <link rel="stylesheet" href="../css/work_page_style.css" />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-68313662-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+    <title>Brian Yang | Lumi</title>
+  </head>
+  <body>
+    <div class="p_header">
+      <a class="p_name_label" href="../">BRIAN YANG</a>
+
+      <span class="p_nav">
+        <a href="../" class="p_nav_link_selected">WORK</a>
+        <a href="../about" class="p_nav_link">ABOUT</a>
+      </span>
+    </div>
+
+    <div class="container p_content_container">
+      <div class="row p_content_row">
+        <img class="img-responsive p_hero_image" src="../images/work/lumi/hero.jpg"></img>
+      </div>
+      <div class="row p_content_row">
+        <div class="p_title_header">
+          <span class="p_title_name">LUMI</span>
+          <span class="p_title_time">MARCH 2016</span>
+        </div>
+        <p>Lumi is a gesture-controlled smart mirror that was built as a senior capstone project. The smart mirror is designed to display easily glanceable information to the user. We imagined a common use case in the morning where a user can quickly glance at the day ahead, catch up on morning news, and even take a quick selfie. This project was done in collaboration with three other colleagues who are acknowledged below. My contributions included hardware design and fabrication, gesture recongition software, user experience design, and feature engineering.</p>
+      </div>
+      <div class="row p_content_row">
+        <img class="img-responsive" src="../images/work/lumi/image_1.jpg"/>
+      </div>
+      <div class="row p_content_row">
+        <span class="p_subtitle">HARDWARE</span>
+      </div>
+      <div class="row p_content_row">
+        <p>The mirror display is a 34" 2K high-resolution monitor oriented 90-degrees with a two-way acrylic mirror affixed in front. Mounted to the back of the monitor is a computer running custom software we designed and built for this project. For gesture input, we used an Xbox Kinect sensor placed below the display.</p>
+      </div>
+      <div class="row p_content_row">
+        <img class="img-responsive" src="../images/work/lumi/image_2.jpg"/>
+      </div>
+      <div class="row p_content_row">
+        <p>Fortunately, the Xbox Kinect sensor has a motorized tilting mechanism that allowed us to change the angle of the sensor depending on the user's height for optimal gesture capturing. A set of external speakers were also mounted behind the display to serve as audio output for streaming music and playing videos. During our initial researech for this project, we noticed that many existing DIY smart mirrors either used a touchscreen input or simply didn't have any user input. We felt that being able to directly interact with the smart mirror was crucial to creating an IoT device that was actually feature rich and useful. However, two main factors dissuaded us from using a touchscreen input: (1) intentionally putting fingerprints on a mirror is never desirable, and (2) a touchscreen at a mirror size would be prohibitively expensive for us. Given the relative ubiquity of Xbox Kinect sensors and its open-source capture libraries, it was an obvious choice to use gesture controls.</p>
+      </div>
+      <div class="row p_content_row">
+        <span class="p_subtitle">SOFTWARE</span>
+      </div>
+      <div class="row p_content_row">
+        <img class="img-responsive" src="../images/work/lumi/image_3.jpg"/>
+      </div>
+      <div class="row p_content_row">
+        <p>Given that this was a CS capstone project, the software that powered our mirror display was a crucial component. Our vision for the mirror was to have independent glanceable widgets that would show content and notifications along the left and right columns. These widgets included services like the clock, weather, email, Twitter, stocks, live NPR news streams, and a rotating gallery of photos. The widgets' position and settings can be configured from an easy-to-use web dashboard. In addition to glanceable widgets, we also wanted to create apps that provided more functionality to the mirror. For instance, we took advantage of the mirror by creating an app that can play makeup tutorials from YouTube so a user could easily follow a video tutorial while looking at themselves in the mirror. Other apps we built included a toothbrushing timer and a selfie camera. Given more time, we could easily envision a suite of other apps being built including clothing try-ons, games, and much more.</p>
+      </div>
+      <div class="row p_content_row">
+        <p>Throughout our design process, we iterated on many interaction and input methods. We ultimately came up with our radial menu design (shown below) which we believed is an intuitive input method. To use the menu, the user simply raises their arm in front of them and the menu appears with options surrounding the menu. To select an option, the user only needs to move and hold their arm slightly in the direction of the desired option and hold. After holding for three seconds, the option is selected. The menu options presented change depending on the context; for instance, when playing a video, the menu presents options like play/pause, skip, and back. When designing this input method, we wanted to ensure that gesture controls were as simple as possible. By minimizing finicky movements, such as using fingers, we created a gesture system that was very forgiving yet accurate and fluid.</p>
+      </div>
+      <div class="row p_content_row">
+        <video loop="loop" autoplay="autoplay">
+          <source src="../images/work/lumi/demo.mp4" type="video/mp4">
+          <img class="img-responsive" src="../images/work/lumi/demo_error.jpg"/>
+        </video>
+      </div>
+      <div class="row p_content_row">
+        <p>Because many of the features we wanted to build for this mirror were web-enabled services, we used Node.js as the primary host framework. The display simply runs a fullscreen web browser that loads a webpage connected to the local Node.js server. Within the server, we built frameworks and models for supporting widgets and apps as well as configuration interfaces. We also created a custom server/client communication protocol that was particuarly useful for handling data streams from the Xbox Kinect. For gesture recongition, we built a separate Python server that took input from the Xbox Kinect sensor and streamed the input data to the Node.js server.</p>
+      </div>
+      <div class="row p_content_row">
+        <p>This project was done in collaboration with Dan Guo, Sloane Sturzenegger, and Jonathan Yan (pictured above). This project was awarded Star of Show, the only recognition given in the capstone project course.</p>
+      </div>
+      <div class="row p_social_bar">
+        <a href="https://www.instagram.com/brianliyang" target="_blank"><img class="img-responsive p_social_icon" src="../images/about/social_instagram@2x.png" width="69px" height="70px" alt="Instagram"/></a>
+        <a href="https://twitter.com/brianliyang" target="_blank"><img class="img-responsive p_social_icon" src="../images/about/social_twitter@2x.png" width="69px" height="70px" alt="Twitter"/></a>
+        <a href="https://www.linkedin.com/in/brianliyang" target="_blank"><img class="img-responsive p_social_icon" src="../images/about/social_linkedin@2x.png" width="69px" height="70px" alt="LinkedIn"/></a>
+        <a href="https://stackoverflow.com/users/394933/brian" target="_blank"><img class="img-responsive p_social_icon" src="../images/about/social_stackoverflow@2x.png" width="69px" height="70px" alt="Stack Overflow"/></a>
+        <a href="mailto:me@brianliyang.com" target="_blank"><img class="img-responsive p_social_icon" src="../images/about/social_email@2x.png" width="69px" height="70px" alt="Email"/></a>
+      </div>
+      <div class="row p_copyright_footer">
+        <span>Copyright <b>&copy;</b> 2015-2022 Brian Yang</span>
+      </div>
+    </div>
+  </body>
+</html>
