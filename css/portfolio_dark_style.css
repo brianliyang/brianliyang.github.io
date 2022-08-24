@@ -1,6 +1,6 @@
 body {
   -webkit-font-smoothing: antialiased;
-  background-color: #F4F4F4;
+  background-color: #000000;
   font-family: "proximanova-regular";
 }
 
@@ -98,14 +98,12 @@ a.p_nav_link_selected, .p_nav_link_selected:hover {
 }
 
 .p_card_z1 {
-  background-color: #FFFFFF;
-  box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.12), 0px 2px 2px 0px rgba(0,0,0,0.24);
+  background-color: #222222;
   border-radius: 16px;
 }
 
 .p_card_z2 {
-  background-color: #FFFFFF;
-  box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.10), 0px 3px 6px 0px rgba(0,0,0,0.15);
+  background-color: #222222;
   border-radius: 16px;
 }
 
