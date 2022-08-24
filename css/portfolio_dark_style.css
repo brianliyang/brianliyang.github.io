@@ -73,3 +73,57 @@ a.p_nav_link_selected, .p_nav_link_selected:hover {
   background-color: #222222;
   border-radius: 16px;
 }
+
+@media (max-width: 750px) {
+  a.p_name_label {
+    display: block;
+    text-align: center;
+  }
+
+  .p_nav {
+    display: block;
+    margin-top: 30px;
+    text-align: center;
+    color: #FF0000;
+    font-size: 18px;
+  }
+
+  a.p_nav_link {
+    margin-left: 30px;
+  }
+
+  a.p_nav_link_selected, .p_nav_link_selected:hover {
+    margin-left: 30px;
+  }
+}
+
+@media (max-width: 540px) {
+  a.p_name_label {
+    display: block;
+    text-align: center;
+  }
+
+  .p_nav {
+    display: block;
+    margin-top: 30px;
+    text-align: center;
+    color: #FF0000;
+    font-size: 18px;
+  }
+
+  a.p_nav_link {
+    display: block;
+    margin: 0px;
+    margin-top: 5px;
+  }
+
+  a.p_nav_link_selected, .p_nav_link_selected:hover {
+    margin-left: 0px;
+  }
+
+  .p_social_icon {
+    display: inline-block;
+    margin-left: 2px;
+    margin-right: 2px;
+  }
+}
