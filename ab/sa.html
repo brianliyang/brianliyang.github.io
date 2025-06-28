@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Buddies</title>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-functions-compat.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .header h1 {
+            color: #2d3748;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #718096;
+            font-size: 16px;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.2s ease;
+            background: white;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-banner {
+            background-color: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 20px 0;
+            border: 1px solid #fcc;
+            display: none;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-content h2 {
+            margin: 0 0 20px 0;
+            color: #2c3e50;
+        }
+
+        .modal-content p {
+            margin: 0 0 30px 0;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .modal-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            color: white;
+        }
+
+        #copyFieldContainer {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        #copyFieldContainer label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 14px;
+        }
+
+        .copy-field-wrapper {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        #copyField {
+            flex: 1;
+            padding: 10px 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: #f7fafc;
+            color: #4a5568;
+            font-family: monospace;
+        }
+
+        .copy-btn {
+            padding: 10px 16px;
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .copy-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+        }
+
+        .copy-btn:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Account Buddies</h1>
+            <p>Request access to this shared account.</p>
+        </div>
+
+        <div class="error-banner" id="errorBanner" style="display: none;"></div>
+
+        <form class="form" id="loginForm">
+            <div class="form-group">
+                <label for="emailInput">Enter your email:</label>
+                <input type="email" id="emailInput" required>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                Request Access
+            </button>
+        </form>
+
+        <!-- Success Modal -->
+        <div class="modal" id="successModal" style="display: none;">
+            <div class="modal-content">
+                <h2>Access Granted!</h2>
+                <p id="loginPrompt"></p>
+                <div id="copyFieldContainer" style="display: none;">
+                    <div class="copy-field-wrapper">
+                        <input type="text" id="copyField" readonly>
+                        <button class="copy-btn" id="copyBtn">Copy</button>
+                    </div>
+                </div>
+                <div class="modal-buttons">
+                    <button class="btn btn-primary" id="proceedBtn">Proceed to Login</button>
+                    <button class="btn btn-secondary" id="dismissBtn">Dismiss</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration - Change this to match your service
+        const SERVICE_NAME = 'seats';
+        
+        // Firebase configuration for emulator development
+        // For production, replace with your actual Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyCwDaN_YSgb0KD1lKULAXtwuntEfZNjyhg",
+            authDomain: "account-buddies-0625.firebaseapp.com",
+            projectId: "account-buddies-0625",
+            storageBucket: "account-buddies-0625.firebasestorage.app",
+            messagingSenderId: "392486618698",
+            appId: "1:392486618698:web:e351fcad9a7843e785c8b3"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const functions = firebase.functions();
+
+        // Use localhost for development
+        if (window.location.hostname === 'localhost') {
+            functions.useEmulator('localhost', 5001);
+        }
+
+        // DOM elements
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('emailInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const errorBanner = document.getElementById('errorBanner');
+        const successModal = document.getElementById('successModal');
+        const loginPrompt = document.getElementById('loginPrompt');
+        const copyFieldContainer = document.getElementById('copyFieldContainer');
+        const copyField = document.getElementById('copyField');
+        const copyBtn = document.getElementById('copyBtn');
+        const proceedBtn = document.getElementById('proceedBtn');
+        const dismissBtn = document.getElementById('dismissBtn');
+
+        let selectedBuddy = null;
+
+        // Form submission
+        loginForm.addEventListener('submit', handleSubmit);
+
+        // Modal close on backdrop click
+        successModal.addEventListener('click', (e) => {
+            if (e.target === successModal) {
+                // Don't auto-dismiss when clicking outside
+                // hideModal();
+            }
+        });
+
+        // Proceed button
+        proceedBtn.addEventListener('click', () => {
+            if (selectedBuddy && selectedBuddy.login_url) {
+                window.location.href = selectedBuddy.login_url;
+            }
+        });
+
+        // Dismiss button
+        dismissBtn.addEventListener('click', hideModal);
+
+        // Copy button
+        copyBtn.addEventListener('click', copyToClipboard);
+
+        async function handleSubmit(e) {
+            e.preventDefault();
+            
+            const email = emailInput.value.trim();
+            if (!email) {
+                showError('Please enter your email address.');
+                return;
+            }
+
+            setLoading(true);
+            hideError();
+
+            try {
+                const requestServiceLogin = functions.httpsCallable('requestServiceLogin');
+                const result = await requestServiceLogin({
+                    service_name: SERVICE_NAME,
+                    email: email
+                });
+
+                // Store the response data
+                selectedBuddy = {
+                    login_url: result.data.login_url,
+                    login_prompt: result.data.login_prompt,
+                    login_copy_field: result.data.login_copy_field
+                };
+
+                // Show success modal
+                loginPrompt.textContent = result.data.login_prompt;
+                
+                // Handle copy field if available
+                if (result.data.login_copy_field) {
+                    copyField.value = result.data.login_copy_field;
+                    copyFieldContainer.style.display = 'block';
+                } else {
+                    copyFieldContainer.style.display = 'none';
+                }
+                
+                showModal();
+                
+                // Reset form after successful login
+                resetForm();
+                
+            } catch (error) {
+                console.error('Error requesting login:', error);
+                console.error('Error details:', {
+                    code: error.code,
+                    message: error.message,
+                    details: error.details,
+                    stack: error.stack
+                });
+                
+                // Clear email field on failed attempt
+                emailInput.value = '';
+                
+                // Simply display the message from the HttpsError
+                const errorMessage = error.message || 'An error occurred. Please try again.';
+                showError(errorMessage);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        function setLoading(loading) {
+            submitBtn.disabled = loading;
+            submitBtn.innerHTML = loading ? 
+                '<div class="loading"><div class="spinner"></div><span>Requesting access...</span></div>' : 
+                'Request Access';
+        }
+
+        function showError(message) {
+            errorBanner.textContent = message;
+            errorBanner.style.display = 'block';
+        }
+
+        function hideError() {
+            errorBanner.style.display = 'none';
+        }
+
+        function showModal() {
+            successModal.style.display = 'flex';
+        }
+
+        function hideModal() {
+            successModal.style.display = 'none';
+        }
+
+        function resetForm() {
+            emailInput.value = '';
+        }
+
+        async function copyToClipboard() {
+            try {
+                await navigator.clipboard.writeText(copyField.value);
+                
+                // Visual feedback
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = 'Copied!';
+                copyBtn.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)';
+                
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+                
+                // Fallback for older browsers
+                copyField.select();
+                copyField.setSelectionRange(0, 99999); // For mobile devices
+                document.execCommand('copy');
+                
+                // Visual feedback
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = 'Copied!';
+                copyBtn.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)';
+                
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html> 
