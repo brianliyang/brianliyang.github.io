@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seats Alert Forwarding</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-functions-compat.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 560px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .header h1 {
+            color: #2d3748;
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #718096;
+            font-size: 15px;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 14px;
+        }
+
+        .form-group input[type="email"],
+        .form-group input[type="text"] {
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.2s ease;
+            background: white;
+            width: 100%;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .recaptcha-container {
+            display: flex;
+            justify-content: center;
+            margin: 4px 0;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255,255,255,0.4);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-banner {
+            background-color: #fff5f5;
+            color: #c53030;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid #fed7d7;
+            font-size: 14px;
+            display: none;
+        }
+
+        .info-banner {
+            background-color: #ebf8ff;
+            color: #2b6cb0;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid #bee3f8;
+            font-size: 14px;
+            display: none;
+        }
+
+        /* Management view */
+        #managementView {
+            display: none;
+        }
+
+        .authenticated-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #e2e8f0;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .authenticated-header .email-badge {
+            background: #edf2f7;
+            color: #4a5568;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .sign-out-btn {
+            background: none;
+            border: none;
+            color: #718096;
+            font-size: 13px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: background 0.15s;
+        }
+
+        .sign-out-btn:hover {
+            background: #edf2f7;
+            color: #4a5568;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 12px;
+        }
+
+        .mappings-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 24px;
+            min-height: 0;
+        }
+
+        .mapping-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            gap: 12px;
+        }
+
+        .mapping-name {
+            font-size: 14px;
+            color: #2d3748;
+            font-weight: 500;
+            word-break: break-all;
+        }
+
+        .remove-btn {
+            background: none;
+            border: 1px solid #fed7d7;
+            color: #c53030;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .remove-btn:hover:not(:disabled) {
+            background: #fff5f5;
+        }
+
+        .remove-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #a0aec0;
+            font-size: 14px;
+            padding: 20px 0;
+        }
+
+        .add-section {
+            border-top: 2px solid #e2e8f0;
+            padding-top: 20px;
+        }
+
+        .add-row {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+        }
+
+        .add-row input[type="text"] {
+            flex: 1;
+            padding: 11px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .add-row input[type="text"]:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .add-btn {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            border: none;
+            padding: 11px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .add-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.35);
+        }
+
+        .add-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .add-error {
+            color: #c53030;
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .add-info {
+            color: #2b6cb0;
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Seats Alert Forwarding</h1>
+            <p>Manage where your seats.aero flight alerts are forwarded.</p>
+        </div>
+
+        <!-- Auth view -->
+        <div id="authView">
+            <div class="error-banner" id="authError"></div>
+            <form class="form" id="authForm">
+                <div class="form-group">
+                    <label for="emailInput">Enter your email:</label>
+                    <input type="email" id="emailInput" placeholder="you@example.com" required>
+                </div>
+                <div class="recaptcha-container">
+                    <div class="g-recaptcha" data-sitekey="6LfqlXUrAAAAAHY1wLTj38IQ541NajSrJTpZKmz4"></div>
+                </div>
+                <button type="submit" class="submit-btn" id="authBtn">Continue</button>
+            </form>
+        </div>
+
+        <!-- Management view -->
+        <div id="managementView">
+            <div class="authenticated-header">
+                <span class="email-badge" id="authenticatedEmail"></span>
+                <button class="sign-out-btn" id="signOutBtn">Sign out</button>
+            </div>
+
+            <div class="error-banner" id="managementError"></div>
+            <div class="info-banner" id="managementInfo"></div>
+
+            <div class="section-title">Your alert groups</div>
+            <div class="mappings-list" id="mappingsList"></div>
+
+            <div class="add-section">
+                <div class="section-title">Add alert group</div>
+                <div class="add-row">
+                    <input type="text" id="newGroupName" placeholder='e.g. "NYC-LAX Business"'>
+                    <button class="add-btn" id="addBtn">Add</button>
+                </div>
+                <div class="add-error" id="addError"></div>
+                <div class="add-info" id="addInfo"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCwDaN_YSgb0KD1lKULAXtwuntEfZNjyhg",
+            authDomain: "account-buddies-0625.firebaseapp.com",
+            projectId: "account-buddies-0625",
+            storageBucket: "account-buddies-0625.firebasestorage.app",
+            messagingSenderId: "392486618698",
+            appId: "1:392486618698:web:e351fcad9a7843e785c8b3"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const functions = firebase.functions();
+
+        if (window.location.hostname === 'localhost') {
+            functions.useEmulator('localhost', 5001);
+        }
+
+        const getSeatsAlertGroupMappings = functions.httpsCallable('getSeatsAlertGroupMappings');
+        const addSeatsAlertGroupMapping = functions.httpsCallable('addSeatsAlertGroupMapping');
+        const removeSeatsAlertGroupMapping = functions.httpsCallable('removeSeatsAlertGroupMapping');
+
+        let currentEmail = null;
+        let currentAlertGroups = [];
+
+        // DOM refs
+        const authView = document.getElementById('authView');
+        const authForm = document.getElementById('authForm');
+        const emailInput = document.getElementById('emailInput');
+        const authBtn = document.getElementById('authBtn');
+        const authError = document.getElementById('authError');
+
+        const managementView = document.getElementById('managementView');
+        const authenticatedEmail = document.getElementById('authenticatedEmail');
+        const signOutBtn = document.getElementById('signOutBtn');
+        const mappingsList = document.getElementById('mappingsList');
+        const managementError = document.getElementById('managementError');
+        const managementInfo = document.getElementById('managementInfo');
+
+        const newGroupName = document.getElementById('newGroupName');
+        const addBtn = document.getElementById('addBtn');
+        const addError = document.getElementById('addError');
+        const addInfo = document.getElementById('addInfo');
+
+        // Auth form submit
+        authForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = emailInput.value.trim();
+            if (!email) return;
+
+            const recaptchaResponse = grecaptcha.getResponse();
+            if (!recaptchaResponse) {
+                showAuthError('Please complete the reCAPTCHA verification.');
+                return;
+            }
+
+            setAuthLoading(true);
+            hideAuthError();
+
+            try {
+                const result = await getSeatsAlertGroupMappings({ email, recaptchaToken: recaptchaResponse });
+                currentEmail = email.toLowerCase();
+                currentAlertGroups = result.data.alert_group_names || [];
+                showManagementView();
+            } catch (err) {
+                grecaptcha.reset();
+                showAuthError(err.message || 'An error occurred. Please try again.');
+            } finally {
+                setAuthLoading(false);
+            }
+        });
+
+        signOutBtn.addEventListener('click', () => {
+            currentEmail = null;
+            currentAlertGroups = [];
+            emailInput.value = '';
+            grecaptcha.reset();
+            managementView.style.display = 'none';
+            authView.style.display = 'block';
+        });
+
+        addBtn.addEventListener('click', async () => {
+            const groupName = newGroupName.value.trim();
+            if (!groupName) return;
+
+            hideAddMessages();
+            setAddLoading(true);
+
+            try {
+                await addSeatsAlertGroupMapping({ email: currentEmail, alert_group_name: groupName });
+                currentAlertGroups.push(groupName);
+                newGroupName.value = '';
+                renderMappings();
+                showManagementInfoBriefly('Alert group added.');
+            } catch (err) {
+                showAddError(err.message || 'Failed to add alert group.');
+            } finally {
+                setAddLoading(false);
+            }
+        });
+
+        newGroupName.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); addBtn.click(); }
+        });
+
+        async function removeGroup(groupName) {
+            hideManagementMessages();
+            const row = document.getElementById(`row-${CSS.escape(groupName)}`);
+            const btn = row ? row.querySelector('.remove-btn') : null;
+            if (btn) btn.disabled = true;
+
+            try {
+                await removeSeatsAlertGroupMapping({ email: currentEmail, alert_group_name: groupName });
+                currentAlertGroups = currentAlertGroups.filter(g => g !== groupName);
+                renderMappings();
+                showManagementInfoBriefly('Alert group removed.');
+            } catch (err) {
+                if (btn) btn.disabled = false;
+                showManagementError(err.message || 'Failed to remove alert group.');
+            }
+        }
+
+        function renderMappings() {
+            mappingsList.innerHTML = '';
+            if (currentAlertGroups.length === 0) {
+                mappingsList.innerHTML = '<div class="empty-state">No alert groups configured yet.</div>';
+                return;
+            }
+            for (const name of currentAlertGroups) {
+                const row = document.createElement('div');
+                row.className = 'mapping-row';
+                row.id = `row-${name}`;
+                row.innerHTML = `
+                    <span class="mapping-name">${escapeHtml(name)}</span>
+                    <button class="remove-btn" onclick="removeGroup(${JSON.stringify(name)})">Remove</button>
+                `;
+                mappingsList.appendChild(row);
+            }
+        }
+
+        function showManagementView() {
+            authView.style.display = 'none';
+            authenticatedEmail.textContent = currentEmail;
+            hideManagementMessages();
+            renderMappings();
+            managementView.style.display = 'block';
+        }
+
+        function setAuthLoading(loading) {
+            authBtn.disabled = loading;
+            authBtn.innerHTML = loading
+                ? '<div class="loading"><div class="spinner"></div><span>Verifying...</span></div>'
+                : 'Continue';
+        }
+
+        function setAddLoading(loading) {
+            addBtn.disabled = loading;
+            addBtn.textContent = loading ? 'Adding...' : 'Add';
+        }
+
+        function showAuthError(msg) {
+            authError.textContent = msg;
+            authError.style.display = 'block';
+        }
+
+        function hideAuthError() {
+            authError.style.display = 'none';
+        }
+
+        function showManagementError(msg) {
+            managementError.textContent = msg;
+            managementError.style.display = 'block';
+            managementInfo.style.display = 'none';
+        }
+
+        function showManagementInfoBriefly(msg) {
+            managementInfo.textContent = msg;
+            managementInfo.style.display = 'block';
+            managementError.style.display = 'none';
+            setTimeout(() => { managementInfo.style.display = 'none'; }, 3000);
+        }
+
+        function hideManagementMessages() {
+            managementError.style.display = 'none';
+            managementInfo.style.display = 'none';
+        }
+
+        function showAddError(msg) {
+            addError.textContent = msg;
+            addError.style.display = 'block';
+            addInfo.style.display = 'none';
+        }
+
+        function hideAddMessages() {
+            addError.style.display = 'none';
+            addInfo.style.display = 'none';
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+    </script>
+</body>
+</html>
