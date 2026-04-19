@@ -154,6 +154,7 @@
             border-radius: 8px;
             border: 1px solid #bee3f8;
             font-size: 14px;
+            margin-bottom: 16px;
             display: none;
         }
 
@@ -266,6 +267,13 @@
             padding-top: 20px;
         }
 
+        .section-subtext {
+            color: #718096;
+            font-size: 13px;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
         .add-row {
             display: flex;
             gap: 8px;
@@ -331,7 +339,7 @@
     <div class="container">
         <div class="header">
             <h1>Seats Alert Forwarding</h1>
-            <p>Manage where your seats.aero flight alerts are forwarded.</p>
+            <p>Forward your continuous flight alert emails.</p>
         </div>
 
         <!-- Auth view -->
@@ -342,7 +350,7 @@
                     <label for="emailInput">Enter your email:</label>
                     <input type="email" id="emailInput" placeholder="you@example.com" required>
                 </div>
-                <div class="recaptcha-container">
+                <div class="recaptcha-container" id="recaptchaContainer">
                     <div class="g-recaptcha" data-sitekey="6LfqlXUrAAAAAHY1wLTj38IQ541NajSrJTpZKmz4"></div>
                 </div>
                 <button type="submit" class="submit-btn" id="authBtn">Continue</button>
@@ -353,7 +361,7 @@
         <div id="managementView">
             <div class="authenticated-header">
                 <span class="email-badge" id="authenticatedEmail"></span>
-                <button class="sign-out-btn" id="signOutBtn">Sign out</button>
+                <button class="sign-out-btn" id="signOutBtn">Sign Out</button>
             </div>
 
             <div class="error-banner" id="managementError"></div>
@@ -364,8 +372,9 @@
 
             <div class="add-section">
                 <div class="section-title">Add alert group</div>
+                <p class="section-subtext">Copy over the exact alert group name you have set on seats.aero. When new flight(s) are found, the notification will be forwarded to your email. Remember to remove alert groups you are no longer using.</p>
                 <div class="add-row">
-                    <input type="text" id="newGroupName" placeholder='e.g. "NYC-LAX Business"'>
+                    <input type="text" id="newGroupName" placeholder='Case-sensitive alert group name...'>
                     <button class="add-btn" id="addBtn">Add</button>
                 </div>
                 <div class="add-error" id="addError"></div>
@@ -552,7 +561,7 @@
             managementInfo.textContent = msg;
             managementInfo.style.display = 'block';
             managementError.style.display = 'none';
-            setTimeout(() => { managementInfo.style.display = 'none'; }, 3000);
+            setTimeout(() => { managementInfo.style.display = 'none'; }, 5000);
         }
 
         function hideManagementMessages() {
