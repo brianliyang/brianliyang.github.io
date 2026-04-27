@@ -46,11 +46,6 @@ a.p_nav_link {
   text-decoration: none;
   margin-left: 50px;
 
-  -o-transition: color 0.2s;
-  -moz-transition: color 0.2s;
-  -khtml-transition: color 0.2s;
-  -webkit-transition: color 0.2s;
-  -ms-transition: color 0.2s;
   transition: color 0.2s;
 }
 

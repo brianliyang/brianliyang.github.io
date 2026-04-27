@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /Users/brian/git/personal/brianliyang.com log --oneline --no-walk --all)",
+      "Bash(git -C /Users/brian/git/personal/brianliyang.com log --oneline -15)",
+      "Bash(git -C /Users/brian/git/personal/brianliyang.com status --short)",
+      "Bash(git -C /Users/brian/git/personal/brianliyang.com ls-files)",
+      "Bash(grep -E \"\\\\.psd$|\\\\.map$|DS_Store\")",
+      "Bash(python3 *)",
+      "Bash(git rm *)",
+      "Bash(grep -E '\\\\.\\(psd|map\\)$|\\\\.DS_Store$|npm\\\\.js$')",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git cherry-pick *)",
+      "Bash(git commit *)"
+    ]
+  }
+}

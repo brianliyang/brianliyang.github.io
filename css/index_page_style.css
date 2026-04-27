@@ -5,11 +5,6 @@
 
   /*background-color: rgba(255, 0, 0, 0.2);*/
 
-  -o-transition: all 0.4s;
-  -moz-transition: all 0.4s;
-  -khtml-transition: all 0.4s;
-  -webkit-transition: all 0.4s;
-  -ms-transition: all 0.4s;
   transition: all 0.4s;
 }
 
@@ -19,12 +14,7 @@
   margin-bottom: 75px;
   max-width: 700px;
 
-  -o-transition: "margin" 0.4s;
-  -moz-transition: "margin" 0.4s;
-  -khtml-transition: "margin" 0.4s;
-  -webkit-transition: "margin" 0.4s;
-  -ms-"margin": "margin" 0.4s;
-  transition: "margin" 0.4s;
+  transition: margin 0.4s;
 }
 
 .p_project_hero {
@@ -43,11 +33,6 @@
   padding-bottom: 30px;
   margin: auto;
 
-  -o-transition: all 0.4s;
-  -moz-transition: all 0.4s;
-  -khtml-transition: all 0.4s;
-  -webkit-transition: all 0.4s;
-  -ms-transition: all 0.4s;
   transition: all 0.4s;
 }
 

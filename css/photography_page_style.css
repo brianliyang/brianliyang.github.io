@@ -4,16 +4,6 @@
   margin-right: 50px;
   margin-bottom: 30px;
 
-  background-image: url("../images/photography/placeholder.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: 50% 50%;
-
-  -o-transition: "padding" 0.4s;
-  -moz-transition: "padding" 0.4s;
-  -khtml-transition: "padding" 0.4s;
-  -webkit-transition: "padding" 0.4s;
-  -ms-"padding": "padding" 0.4s;
   transition: all 0.4s;
 }
 

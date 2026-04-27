@@ -1,11 +1,6 @@
 .p_profile_container {
   width: 100%;
 
-  -o-transition: "padding" 0.4s;
-  -moz-transition: "padding" 0.4s;
-  -khtml-transition: "padding" 0.4s;
-  -webkit-transition: "padding" 0.4s;
-  -ms-"padding": "padding" 0.4s;
   transition: all 0.4s;
 }
 
@@ -13,11 +8,6 @@
   margin: 0 auto;
   width: 500px;
 
-  -o-transition: "padding" 0.4s;
-  -moz-transition: "padding" 0.4s;
-  -khtml-transition: "padding" 0.4s;
-  -webkit-transition: "padding" 0.4s;
-  -ms-"padding": "padding" 0.4s;
   transition: all 0.4s;
 }
 
@@ -31,11 +21,6 @@
   margin-bottom: 45px;
   max-width: 700px;
 
-  -o-transition: "margin" 0.4s;
-  -moz-transition: "margin" 0.4s;
-  -khtml-transition: "margin" 0.4s;
-  -webkit-transition: "margin" 0.4s;
-  -ms-"margin": "margin" 0.4s;
   transition: all 0.4s;
 }
 
